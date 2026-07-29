@@ -1,0 +1,38 @@
+[project]
+name = "bulk-website-generator"
+version = "0.1.0"
+description = "bulk_website_generator - A Django project for AI-powered project page generation"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=0.47.2",
+    "beautifulsoup4>=4.13.3",
+    "celery>=5.5.2",
+    "cssutils>=2.11.1",
+    "django==5.0",
+    "django-celery-results>=2.6.0",
+    "django-cors-headers>=4.6.0",
+    "django-environ>=0.12.0",
+    "django-grapesjs>=0.0.7",
+    "djangorestframework>=3.15.2",
+    "environ>=1.0",
+    "openai==0.28",
+    "openpyxl>=3.1.5",
+    "pillow>=11.2.1",
+    "psycopg2-binary>=2.9.10",
+    "redis>=6.0.0",
+    "ruff>=0.9.3",
+    "soupsieve>=2.6",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "RUF"]
+ignore = []
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"

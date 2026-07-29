@@ -1,0 +1,16 @@
+<div style="padding: 5%; min-height: 70vh;">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <section>
+        <a href="{% url 'counties' project_id state_id %}" style="font-size: 12px">< Back</a>
+        <h1 style="margin-bottom: 20px; font-size: 22px">Cities</h1>
+        <ul>
+            {% for city in cities %}
+                <li><a href="{% url 'city_page' project_id city.id %}" style="text-decoration:underline">{{ city.name }}</a>
+                    <a href="{% url 'city_page_edit' project_id city.id %}" style="margin-left: 10px; text-decoration:underline"><i class="fas fa-edit"></i></a>
+                </li>
+            {% empty %}
+                <li>No cities available.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>

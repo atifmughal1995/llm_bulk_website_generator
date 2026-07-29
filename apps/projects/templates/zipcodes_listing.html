@@ -1,0 +1,13 @@
+<div style="padding: 5%; min-height: 70vh;">
+    <section>
+        <a href="{% url 'cities' project_id county_id %}" style="font-size: 12px;">< Back</a>
+        <h1 style="margin-bottom: 20px; font-size: 22px">Zip codes</h1>
+        <ul>
+            {% for zipcode in zipcodes %}
+                <li><a href="{% url 'service_page' zipcode.id %}" style="text-decoration:underline">{{ zipcode.zip_code }}</a></li>
+            {% empty %}
+                <li>No zip codes available.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>

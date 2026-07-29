@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Listing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<style>
+    h1{
+        font-size: 26px;
+    }
+
+    input[name="client_domain"], input[name="email"], input[name="contact_phone_number"]{
+        border-radius: 5px;
+        border: 1px solid #aaa;
+        width: 100%;
+        height: 40px;
+        margin: 10px 10px 20px 0px;
+        font-size: 14px;
+        padding: 0px 15px;
+        color: #111;
+    }
+
+    label{
+        font-size: 14px;
+        font-weight: 500;
+        color: #111;
+
+
+    }
+
+    .submit-btn {
+        background: #0b192f !important;
+        margin-top: 40px !important;
+    }
+
+    select[name="project"] {
+        padding: 0px 10px;
+        margin-top: 10px;
+    }
+
+    .space-y-2 p {
+        margin: 20px 0px;
+    }
+
+    .errorlist{
+        display: none
+    }
+
+    .instructions{
+        background: #0b192f3b;
+        border-radius: 30px;
+        margin-bottom: 30px;
+        border: 1px solid #0b192f57;
+    }
+
+    .dns-table {
+        max-width: 600px;
+        margin: 20px 0px;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        font-size: 14px;
+    }
+
+    .dns-table th,
+    .dns-table td {
+        padding: 12px 16px;
+        text-align: left;
+        border: 1px solid #9c9c9c;
+    }
+
+    .dns-table thead {
+        background-color: #fff;
+        border-radius: 10px 0px 0px 0px;
+    }
+
+    .dns-table tbody tr{
+        background-color: #f9f9f9;
+    }
+
+    .dns-table tbody tr:hover {
+        background-color: #eef6ff;
+    }
+
+    .dns-table td strong {
+        color: #333;
+    }
+
+    .history-table {
+        width: 100%;
+        margin: 40px auto;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .history-table thead {
+        background-color: #374151;
+        color: white;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .history-table th {
+        font-size: 1.1em;
+    }
+
+    .history-table td {
+        font-size: 0.95em;
+    }
+</style>
+
+<body>
+    <div class="w-full" style="background: rgb(11, 25, 47);">
+        <div id="navbar" class="w-full flex items-center justify-between sectionWidth py-[30px] px-[30px]">
+            <div id="logo" class="text-[24px] font-[800]" style="color: rgb(255, 118, 23);">CPP</div>
+        </div>
+    </div>
+
+    <div style="min-height: 35vh; margin: 5vh 10vh;">
+        <a type="button" class="px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white  rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" style="background: #0b192f;"
+        href="{% url 'projects' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+          </svg>
+            All Projects
+        </a>
+
+        <h1 style="font-size: 26px; margin: 20px 0px;">Settings</h1>
+    
+        <form method="post" action="{% url 'client_domain' project.id %}" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="bg-red-500 text-white p-3 rounded">
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="space-y-2">  
+                {{ form.as_p }}  <!-- Renders the form fields automatically -->
+            </div>
+        <button type="submit" class="submit-btn text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+            Save
+        </button>
+        </form>
+        
+        {% if netlify_urls %}
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Netlify URLs History</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for url in netlify_urls %}
+                    <tr>
+                        <td>
+                            {% if url == project.netlify_site_url %}
+                            <a href="{{url}}" target="_blank" rel="noopener noreferrer" class="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow inline-block">{{url}}</a>
+                            {% else %}
+                            <a href="{{url}}" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow inline-block">{{url}}</a>
+                            {% endif %}
+                        </td>
+                    <td>
+                        <form action="{% url 'delete_netlify_site' project.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="site_url" value="{{ url }}">
+                            <button type="submit" class="text-red-600 hover:text-red-800 bg-transparent border-0 pl-3 cursor-pointer" 
+                                    onclick="return confirm('Are you sure you want to delete this netlify site?');" 
+                                    aria-label="Delete page">
+                            <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+    </div>
+
+    <div>
+        <div class="container mx-auto p-10 instructions">
+            <h1 class="text-2xl font-bold mb-4">How to Add a CNAME to Your Domain</h1>
+            {% if ip %}
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>Log in to your domain provider account.</li>
+                    <li>Go to your DNS management dashboard (on your domain registrar or DNS provider).</li>
+                    <li>Look for a section called DNS Records, Manage DNS, or DNS Settings.</li>
+                    <li>
+                        Add the following TXT record:
+                        <table class="dns-table">
+                            <thead>
+                                <tr>
+                                    <th>Name/Host</th>
+                                    <th>Value/Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>netlify-challenge</td>
+                                    <td>cpp</td>
+                                </tr>
+                            </tbody>
+                        </table>                         
+                    </li>
+                    <li>
+                        Add the following CNAME records:
+                        <table class="dns-table">
+                            <thead>
+                                <tr>
+                                    <th>Name/Host</th>
+                                    <th>Value/Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>www</td>
+                                    <td>{{ip}}</td>
+                                </tr>
+                                <tr>
+                                    <td>@</td>
+                                    <td>{{ip}}</td>
+                                </tr>
+                            </tbody>
+                        </table>                         
+                    </li>
+                    <li>Save the changes.</li>
+                </ol>
+                <p class="mt-4 text-sm text-gray-500">Note: DNS changes may take up to 48 hours to propagate.</p>
+            {% else %}
+                <li>Publish the project first.</li>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="background: white;">
+        <div class="text-center py-[30px] border-t-[0.25px] text-[18px]">
+            <p>Copyright © 2025 CPP - Powered by CPP</p>
+        </div>
+    </div>
+
+<script type="module" src="/src/main.tsx?t=1739442228609"></script>
+
+<div id="loom-companion-mv3" ext-id="liecbddmkiiihnedobmlmillhodjkdmb">
+<div id="shadow-host-companion"></div>
+</div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const submitButton = document.querySelector(".submit-btn");
+        
+        form.addEventListener("submit", function () {
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <svg aria-hidden="true" role="status" class="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5C100 78.27 78.27 100 50.5 100 22.73 100 1 78.27 1 50.5 1 22.73 22.73 1 50.5 1" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-dasharray="90 50"/>
+                </svg>
+                Loading...`;
+        });
+    });
+</script>
+
+</html>

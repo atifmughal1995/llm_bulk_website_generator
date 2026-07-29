@@ -1,0 +1,15 @@
+<div style="padding: 5%; min-height: 70vh;">
+    <section>
+        <a href="{% url 'homepage' project_id %}" style="font-size: 12px">< Back</a>
+        <h1 style="margin-bottom: 20px; font-size: 22px">States</h1>
+        <ul>
+            {% for state in states %}
+                <li>  
+                    <a href="{% url 'counties' project_id state.id %}" style="text-decoration:underline">{{ state.name }} - {{ state.abbreviation }}</a>
+                </li>
+            {% empty %}
+                <li>No states available.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Listing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<style>
+    h1{
+        font-size: 26px;
+    }
+
+    .heading {
+        background: rgb(55 65 81);
+        color: white;
+    }
+
+    .icon, .name {
+        color: #374151;
+    }
+
+    .border-b-2{
+        border: 1px solid #28303d;
+    }
+
+    .main{
+        min-height: 60vh;
+        margin: 10vh 10vh;
+    }
+
+    @media (max-width: 700px) {
+       .main {
+            margin: 20px 20px;
+       }
+    }
+</style>
+
+<body>
+    <div class="w-full" style="background: rgb(11, 25, 47);">
+        <div id="navbar" class="w-full flex items-center justify-between sectionWidth py-[30px] px-[30px]">
+            <div id="logo" class="text-[24px] font-[800]" style="color: rgb(255, 118, 23);">CPP</div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="flex flex-col md:flex-row md:justify-end gap-4 mb-5">
+            <a class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" 
+                href="{% url 'upload_file' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 20 16">
+                    <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z"/>
+                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                </svg>
+                <span class="ml-2">Upload File</span>
+            </a>
+            <a class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center" 
+                href="{% url 'create_project' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 34 24">
+                    <path d="M11 21H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h5l2 3h9a2 2 0 0 1 2 2v2M19 15v6M16 18h6"/>
+                </svg>
+                <span class="ml-2">Create Project</span>
+            </a>
+        </div>
+    
+        <section>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse rounded-lg overflow-hidden shadow-md bg-white">
+                    <thead class="heading" class="bg-gray-200 text-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 border-b-2">Project</th>
+                            <th class="px-6 py-3 border-b-2 text-center">View</th>
+                            <th class="px-6 py-3 border-b-2 text-center">Edit</th>
+                            <th class="px-6 py-3 border-b-2 text-center">Settings</th>
+                            <th class="px-6 py-3 border-b-2 text-center">Delete</th>
+                            <th class="px-6 py-3 border-b-2 text-center">Action</th>
+                            <th class="px-6 py-3 border-b-2 text-center">Netlify Link</th>
+                            <th class="px-6 py-3 border-b-2 text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300">
+                        {% for project in projects %}
+                            <tr class="hover:bg-gray-100 transition">
+                                <td class="px-6 py-3">
+                                    <a href="{% url 'project_detail' project.id %}" class="hover:underline" class="name">{{ project.name }}</a>
+                                </td>
+                                <td class="px-6 py-3 text-center">
+                                    <a href="{% url 'homepage' project.id %}" target="_blank" class="icon">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                                <td class="px-6 py-3 text-center">
+                                    <a href="{% url 'homepage_edit' project.id %}" target="_blank" class="icon">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td class="px-6 py-3 text-center">
+                                    <a href="{% url 'client_domain' project.id %}" target="_blank" class="icon">
+                                        <i class="fas fa-cog"></i>
+                                    </a>
+                                </td>
+
+                                <td class="px-6 py-3 text-center">
+                                    <form action="{% url 'delete' project.id %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="text-red-600 hover:text-red-800 bg-transparent border-0 p-0 cursor-pointer" 
+                                                onclick="return confirm('Are you sure you want to delete this project?');" 
+                                                aria-label="Delete project">
+                                        <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                                
+                                <td class="px-6 py-3 text-center">
+                                    <button 
+                                        onclick="event.preventDefault(); publishProject({{ project.id }})" 
+                                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">
+                                        {% if project.netlify_site_url %}
+                                            Republish
+                                        {% else %} 
+                                            Publish
+                                        {% endif %}
+                                    </button>
+                                </td>
+                                
+                                <td class="px-6 py-3 text-center">
+                                    {% if project.netlify_site_url %}
+                                        <a 
+                                            href="{{ project.netlify_site_url }}" 
+                                            target="_blank" 
+                                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow inline-block">
+                                            {{ project.netlify_site_url }}
+                                        </a>
+                                    {% else %} 
+                                        <a>N/A</a>
+                                    {% endif %}
+                                </td>
+
+                                <td class="px-6 py-3 text-center">
+                                    {{ project.status|default_if_none:"" }}
+                                    {% if project.status == 'In progress' %}
+                                    <svg aria-hidden="true" role="status" class="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M100 50.5C100 78.27 78.27 100 50.5 100 22.73 100 1 78.27 1 50.5 1 22.73 22.73 1 50.5 1" stroke="black" stroke-width="5" stroke-linecap="round" stroke-dasharray="90 50"></path>
+                                    </svg>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="px-6 py-3 text-center text-gray-500">No projects available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div style="background: white;">
+        <div class="text-center py-[30px] border-t-[0.25px] text-[18px]">
+            <p>Copyright © 2025 CPP - Powered by CPP</p>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.tsx?t=1739442228609"></script>
+
+    <script>
+        async function publishProject(projectId) {
+            try {
+                const response = await fetch(`{% url 'publish_project' 0 %}`.replace('0', projectId), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({}) // send data if needed
+                });
+        
+                if (response.ok) {
+                    showToast('Publish process is started.');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500); // adjust delay if needed
+                } else {
+                    showToast('Failed to publish project.');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('An error occurred.');
+            }
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1c3153;
+                color: #fff;
+                padding: 10px 20px;
+                border-radius: 6px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                z-index: 10000;
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+
+    <div id="loom-companion-mv3" ext-id="liecbddmkiiihnedobmlmillhodjkdmb">
+    <div id="shadow-host-companion"></div>
+    </div>
+</body>
+</html>

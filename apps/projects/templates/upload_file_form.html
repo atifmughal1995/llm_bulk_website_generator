@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Listing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+    h1{
+        font-size: 26px;
+    }
+
+    input[name="file"], select[name='project']{
+        border-radius: 5px;
+        border: 1px solid #aaa;
+        width: 100%;
+        height: 40px;
+        margin: 10px 10px 20px 0px;
+        font-size: 14px;
+        padding: 0px 15px;
+        color: #111;
+    }
+
+    label{
+        font-size: 14px;
+        font-weight: 500;
+        color: #111;
+    }
+
+    .submit-btn {
+        background: #0b192f !important;
+        margin-top: 40px !important;
+    }
+
+    select[name="project"] {
+        padding: 0px 10px;
+        margin-top: 10px;
+    }
+
+    .space-y-2 p {
+        margin: 20px 0px;
+    }
+
+    input[name="file"]{
+        border: none;
+        padding: 7px 0px;
+    }
+
+    .errorlist{
+        display: none
+    }
+
+</style>
+
+<body>
+    <div class="w-full" style="background: rgb(11, 25, 47);">
+        <div id="navbar" class="w-full flex items-center justify-between sectionWidth py-[30px] px-[30px]">
+            <div id="logo" class="text-[24px] font-[800]" style="color: rgb(255, 118, 23);">CPP</div>
+        </div>
+    </div>
+
+    <div style="min-height: 70vh; margin: 5vh 10vh;">
+        <a type="button" class="px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white  rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" style="background: #0b192f;"
+        href="{% url 'projects' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+          </svg>
+            All Projects
+        </a>
+
+        <h1 style="font-size: 26px; margin: 20px 0px;">Upload File</h1>
+    
+        <form method="post" action="{% url 'upload_file' %}" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                    <div class="bg-red-500 text-white p-3 rounded">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            <div class="space-y-2">  
+                {{ form.as_p }}  <!-- Renders the form fields automatically -->
+            </div>
+        <button type="submit" class="submit-btn text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+            Upload
+        </button>
+        </form>
+    </div>
+
+    <div style="background: white;">
+        <div class="text-center py-[30px] border-t-[0.25px] text-[18px]">
+            <p>Copyright © 2025 CPP - Powered by CPP</p>
+        </div>
+    </div>
+
+<script type="module" src="/src/main.tsx?t=1739442228609"></script>
+
+<div id="loom-companion-mv3" ext-id="liecbddmkiiihnedobmlmillhodjkdmb">
+<div id="shadow-host-companion"></div>
+</div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const submitButton = document.querySelector(".submit-btn");
+        
+        form.addEventListener("submit", function () {
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <svg aria-hidden="true" role="status" class="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5C100 78.27 78.27 100 50.5 100 22.73 100 1 78.27 1 50.5 1 22.73 22.73 1 50.5 1" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-dasharray="90 50"/>
+                </svg>
+                Loading...`;
+        });
+    });
+</script>
+
+</html>

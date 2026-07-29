@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
+  <script src="https://unpkg.com/grapesjs"></script>
+  <script src="https://unpkg.com/grapesjs-preset-webpage"></script>
+
+  <style>
+    html {
+      background: #444444;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .gjs-pn-options * {
+      font-size: 13px;
+    }
+
+    .gjs-pn-custom-editor-panel {
+      border-radius: 10px 0 0 10px;
+      width: 220px;
+      padding: 10px;
+      margin-top: 30%;
+      margin-left: 18px;
+      height: 400px;
+      font-size: 14px;
+    }
+
+    .gjs-pn-custom-editor-panel textarea {
+      color: #000000c2;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 0% 99.5% 0%;
+      width: 100%;
+      min-width: 100%;
+    }
+
+    #settings-panel {
+      display: none;
+      transition: all 0.3s ease-in-out;
+    }
+
+    textarea[name="tracking_code_head"],
+    textarea[name="tracking_code_body"] {
+      width: 100%;
+    }
+
+    .container h1,
+    .container label {
+      color: white;
+      font-size: 13px;
+    }
+
+    button[type="submit"] {
+      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+      background: rgb(0, 123, 255);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    #gjs {
+      border: none;
+    }
+
+    .additional-settings {
+        background-color: #444444; 
+        padding: 0px;
+        border-left: 2px solid #363636;
+        color: #e0e0e0;
+        font-family: 'Segoe UI', sans-serif;
+        height: 100vh;
+        overflow-y: auto;
+        box-shadow: -1px 0 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .additional-settings h1 {
+        font-size: 14px;
+        margin-bottom: 16px;
+        color: #ffffff;
+        border-bottom: 2px solid #363636;
+        padding: 10.5px 10px;
+        margin-top: 0px;
+
+    }
+
+    .additional-settings label {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #ccc;
+    }
+
+    .additional-settings textarea {
+        width: 90%;
+        background-color: #303031;
+        border: 1px solid #555a67;
+        border-radius: 4px;
+        padding: 8px;
+        font-size: 12px;
+        color: #fff;
+        resize: vertical;
+        margin-top: 4px;
+    }
+
+    .additional-settings button[type="submit"] {
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px;
+        margin-top: 16px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.25s ease;
+    }
+
+    .additional-settings button[type="submit"]:hover {
+        background-color: #0065d1;
+    }
+
+    .container-options{
+        padding: 0px 10px
+    }
+
+    .versions-list{
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .versions-list li{
+        color: white;
+        list-style: none;
+        margin: 0;
+        font-size: 12px;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .versions-list li a{
+        color: white
+    }
+
+    .versions-list label {
+        display: block;
+        font-size: 12px;
+        color: #ccc;
+    }
+
+    #versions label {
+        margin-top: 30px
+    }
+
+    .chat-module {
+      background-color: #2e2e2e;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      height: auto;
+      box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 6px;
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .chat-input {
+      width: 96%;
+      resize: none;
+      height: 50px;
+      background-color: #444;
+      color: #fff;
+      border: 1px solid #666;
+      padding: 6px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .chat-send {
+      margin-top: 5px;
+      width: 100%;
+      padding: 8px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+
+    .chat-send:hover {
+      background: #0065d1;
+    }
+
+    .chat-body div {
+      padding: 15px;
+      background: #242323;
+      border: 1px solid #181717;
+      border-radius: 10px;
+      margin: 10px 0px;
+    }
+
+    .chat-send-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .loading-spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #3498db;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+
+    .loading-spinner-selector {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #3498db;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: none;
+      margin-top: -25px;
+      margin-right: 12px;
+      float: right;
+    }
+
+    /* Add spin animation */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="chat-module" id="chat-module">
+      <div class="chat-header">💬 AI Assistant</div>
+      <div class="chat-body" id="chat-body">
+        {% for item in prompt_history %}
+          <div>{{item.prompt}}</div>
+        {% endfor %}
+      </div>
+      <textarea class="chat-input" id="chat-input" placeholder="Type a message..."></textarea>
+      <div class="chat-send-container">
+        <button class="chat-send" id="chat-send">Send</button>
+        <div class="loading-spinner" id="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="column gjs-editor"><div id="gjs">{{ page.complete_html|safe }}</div></div>
+    <div class="column additional-settings" id="settings-panel">
+      <h1>Additonal Settings</h1>
+      <div class="container-options">
+
+        <label for="id_meta_tags">Meta Tags:</label>
+        <textarea name="meta_tags" cols="40" rows="10" id="meta_tags"
+        placeholder='<title>Page Title | Website Name</title>
+<meta name="description" content="A short summary of the page">
+<meta property="og:title" content="Page Title">
+<meta property="og:description" content="A short summary for social media">
+<meta property="og:image" content="Link to an image for sharing">
+<meta property="og:url" content="Full page URL">
+<meta name="keywords" content="keyword1, keyword2, keyword3">'>{{ page.meta_tags }}</textarea>
+
+        {% if is_service_page != 'true' %}
+            <label for="id_tracking_code_head">Tracking code head:</label>
+            <textarea name="tracking_code_head" cols="40" rows="10" id="tracking_code_head">{{ project.tracking_code_head|default:'' }}</textarea>
+
+            <label for="id_tracking_code_body">Tracking code body:</label>
+            <textarea name="tracking_code_body" cols="40" rows="10" id="tracking_code_body">{{ project.tracking_code_body|default:'' }}</textarea>
+        {% endif %}
+
+        <div id="versions">
+            <label>Versions:</label>
+            <ul class="versions-list">
+                {% for version in versions %}
+                    <li>
+                        <a href="#" class="version-link" data-version-id="{{ version.id }}">
+                            <p class="version">{{ version.name }} - <span class="local-time" data-utc="{{ version.created_at|date:"c" }}"></span></p>
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>No versions available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+  var editor = grapesjs.init({
+    container: '#gjs',
+    fromElement: true,
+    height: '100vh',
+    storageManager: false,
+    canvas: {
+      styles: [
+        'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css'
+      ],
+    },
+    domComponents: {
+      styleToAttributes: true, // ✅ Option 2: Keep inline styles in the DOM
+    },
+
+    cssComposer: {
+      keepUnusedStyles: false, // ✅ Option 3: Don’t extract inline styles to CSS
+    },
+
+    styleManager: {
+      clearProperties: true // Optional: prevents "clear all" from deleting inline styles
+    },
+  });
+
+  {% if is_service_page == 'true' %}
+
+  function lockComponent(component) {
+    component.set({
+      editable: false,
+      draggable: false,
+      droppable: false,
+      selectable: false,
+      highlightable: false,
+      copyable: false,
+      removable: false,
+      hoverable: false,
+    });
+
+    // Recursively lock all child components
+    component.components().forEach(child => lockComponent(child));
+  }
+
+  editor.on('load', () => {
+    const header = editor.getWrapper().find('#header')[0];
+    const footer = editor.getWrapper().find('#footer')[0];
+
+    if (header) lockComponent(header);
+    if (footer) lockComponent(footer);
+  });  
+  {% endif %}
+
+  editor.on('component:add', component => {
+    component.set({ highlightable: false });
+  });
+
+  editor.Panels.addButton('options', {
+    id: 'clear-canvas',
+    className: 'btn-custom btn-clear',
+    label: '🗑 Clear',
+    command(editor) {
+      if (confirm('Are you sure you want to clear the canvas?')) {
+        editor.DomComponents.clear();
+      }
+    },
+    attributes: { title: 'Clear All Content' }
+  });
+
+  editor.Panels.addButton('options', {
+    id: 'get-selected-html',
+    className: 'btn-custom',
+    label: '📋 Save',
+    
+    command() {
+      let iframe = editor.Canvas.getFrameEl();
+      let documentContent = iframe.contentDocument.documentElement.outerHTML;
+
+      const trackingCodeHead = document.getElementById('tracking_code_head')?.value || '';
+      const trackingCodeBody = document.getElementById('tracking_code_body')?.value || '';
+      const metaTags = document.getElementById('meta_tags')?.value || '';
+
+
+      {% if is_service_page == 'true' %}
+      fetch("{% url 'city_page_save' project_id page.id %}", {
+      {% else %}
+      fetch("{% url 'page_save' project_id page.id %}", {
+      {% endif %}
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+          html: documentContent,
+          is_service_page: {{ is_service_page }},
+          tracking_code_head: trackingCodeHead,
+          tracking_code_body: trackingCodeBody,
+          meta_tags: metaTags
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success){
+            alert(data.message)
+            const newVersion = data.version;
+
+            // Remove the 'No versions available.' message if it exists
+            const noVersionsMessage = document.querySelector('.versions-list li');
+            if (noVersionsMessage && noVersionsMessage.textContent.trim() === 'No versions available.') {
+            noVersionsMessage.remove();
+            }
+
+            // Create the new list item for the version
+            const newVersionItem = document.createElement('li');
+            newVersionItem.innerHTML = `
+            <a href="#" class="version-link" data-version-id="${newVersion.id}">
+                <p class="version">${newVersion.name} - ${new Date(newVersion.created_at).toLocaleString('en-US', {
+                weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
+                })}</p>
+            </a>
+            `;
+
+            // Prepend it to the versions list (insert at the top)
+            const versionsList = document.querySelector('.versions-list');
+            versionsList.insertBefore(newVersionItem, versionsList.firstChild);
+
+            versionsList.addEventListener('click', function(event) {
+                const versionLink = event.target.closest('.version-link');
+                if (versionLink) {
+                    const versionId = versionLink.getAttribute('data-version-id');
+                    
+                    fetch("{% url 'get_version_html' project_id %}", {
+                        method: "POST",
+                        headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            city_id: {{ page.id }},
+                            project_id: {{ project_id }},
+                            is_service_page: {{ is_service_page }},
+                            version_id: versionId
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            editor.setComponents(data.html);
+                        } else {
+                        alert("Could not load version HTML");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Error loading version");
+                    });
+                }
+            });
+
+        } else {
+          alert("Failed to save. Please try again.");
+        }
+      })
+      .catch(error => console.error("Error saving:", error));
+    },
+    attributes: { title: 'Save' }
+  });
+
+  editor.Panels.addButton('options', {
+    id: 'toggle-settings',
+    className: 'btn-custom',
+    label: '⚙️ Additional Settings',
+    command() {
+        const panel = document.getElementById("settings-panel");
+        const container = document.querySelector(".container");
+        const editorColumn = document.querySelector(".gjs-editor");
+
+        if (panel.style.display === "none" || panel.style.display === "") {
+            panel.style.display = "block";
+
+            container.style.gridTemplateColumns = "0% 85% 15%";
+        } else {
+            panel.style.display = "none";
+
+            container.style.gridTemplateColumns = "0% 100% 0%";
+        }
+    },
+    attributes: { title: 'Toggle Tracking Code Panel' }
+  });
+
+  editor.Panels.addButton('options', {
+    id: 'unselect-component',
+    className: 'btn-custom btn-unselect',
+    label: '❌ Unselect',
+    command() {
+      editor.select(null);
+      panel.set('visible', false);
+    },
+    attributes: { title: 'Unselect the currently selected component' }
+  });
+
+  const panel = editor.Panels.addPanel({
+    id: 'custom-editor-panel',
+    visible: false,
+    buttons: [],
+    appendTo: '.gjs-pn-options'
+  });
+
+  const textarea = document.createElement("textarea");
+  textarea.id = "custom-html-editor";
+  textarea.style.width = "97%";
+  textarea.style.height = "330px";
+  textarea.placeholder = "Type prompt here";
+
+  const button = document.createElement("button");
+  button.innerText = "Regenerate";
+  button.style.marginTop = "10px";
+  button.style.padding = "8px";
+  button.style.width = "100%";
+  button.style.background = "#007bff";
+  button.style.color = "#fff";
+  button.style.border = "none";
+  button.style.cursor = "pointer";
+
+  const selector_spinner = document.createElement("div");
+  selector_spinner.className = "loading-spinner-selector";
+  selector_spinner.id = "loading-spinner-selector";
+
+  button.addEventListener("click", function () {
+    const selected = editor.getSelected();
+    if (selected) {
+      const selectedHtml = selected.toHTML();
+      const promptText = textarea.value;
+
+      selector_spinner.style.display = "block";
+
+      fetch("{% url 'regenerate_html' project_id %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+          html: selectedHtml,
+          prompt: promptText,
+          city_id: {{ page.id }},
+          project_id: {{ project_id }},
+          is_service_page: {{ is_service_page }}
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        selector_spinner.style.display = "none";
+        if (data.success) {
+          selected.replaceWith(data.html);
+        } else {
+          alert("Failed to regenerate. Please try again.");
+        }
+      });
+    } else {
+      alert("No component selected!");
+    }
+  });
+
+  const panelContainer = panel.view.$el[0];
+  panelContainer.appendChild(textarea);
+  panelContainer.appendChild(button);
+  panelContainer.appendChild(selector_spinner);
+
+  editor.on("component:selected", function (model) {
+    if (model) {
+      panel.set('visible', true);
+    }
+  });
+
+  document.querySelectorAll('.version-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const versionId = this.getAttribute('data-version-id');
+
+      fetch("{% url 'get_version_html' project_id  %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+            city_id: {{ page.id }},
+            project_id: {{ project_id }},
+            is_service_page: {{ is_service_page }},
+            version_id: versionId
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+            editor.setComponents(data.html);
+        } else {
+          alert("Could not load version HTML");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error loading version");
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const versionTimes = document.querySelectorAll('.local-time');
+    
+    versionTimes.forEach(function (timeElement) {
+          const utcDate = new Date(timeElement.getAttribute('data-utc')); // Parse the UTC date string
+          const localDate = utcDate.toLocaleString('en-US', {
+              weekday: 'long', // "Monday"
+              month: 'long',   // "April"
+              day: 'numeric',  // "4"
+              year: 'numeric', // "2025"
+              hour: '2-digit', // "02"
+              minute: '2-digit', // "30"
+              hour12: true      // "AM/PM"
+          });
+
+          timeElement.textContent = localDate; // Update the text content with the local time
+      });
+  });
+
+  document.getElementById('chat-send').addEventListener('click', function () {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    const chatBody = document.getElementById('chat-body');
+    const projectId = '{{ project.id }}';
+
+    if (!message) return;
+
+    const userMsg = document.createElement('div');
+    userMsg.textContent = message;
+    chatBody.appendChild(userMsg);
+    input.value = '';
+
+    // Get full HTML content of the page
+    let iframe = editor.Canvas.getFrameEl();
+    let fullHtml = iframe.contentDocument.documentElement.outerHTML;
+    const spinner = document.getElementById("loading-spinner");
+    spinner.style.display = "inline-block";
+
+    // Send API request
+    fetch("{% url 'regenerate_html' project_id %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({
+        html: fullHtml,
+        prompt: message,
+        project_id: {{ project_id }},
+        is_service_page: {{ is_service_page }},
+        save_history: "true"
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      editor.setComponents(data.html);
+      
+      // const botMsg = document.createElement('div');
+      // botMsg.textContent = "Bot: " + (data.reply || 'No response');
+      // chatBody.appendChild(botMsg);
+      // chatBody.scrollTop = chatBody.scrollHeight;
+      
+      spinner.style.display = "none";
+
+    })
+    .catch(error => {
+      const errorMsg = document.createElement('div');
+      errorMsg.textContent = "Error: Something went wrong";
+      chatBody.appendChild(errorMsg);
+      console.error('Error:', error);
+      spinner.style.display = "none";
+
+    });
+  });
+
+</script>
+</body>
+</html>

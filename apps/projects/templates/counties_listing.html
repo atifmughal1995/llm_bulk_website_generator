@@ -1,0 +1,13 @@
+<div style="padding: 5%; min-height: 70vh;">
+    <section>
+        <a href="{% url 'states' project_id %}" style="font-size: 12px">< Back</a>
+        <h1 style="margin-bottom: 20px; font-size: 22px">Counties</h1>
+        <ul>
+            {% for county in counties %}
+                <li><a href="{% url 'cities' project_id county.id %}" style="text-decoration:underline">{{ county.name }}</a></li>
+            {% empty %}
+                <li>No counties available.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>

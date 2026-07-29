@@ -1,0 +1,15 @@
+.venv/
+*.env
+.ruff_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+uploads/
+media/
+staticfiles/
+static/
+project_zips/
+logs/
+db.sqlite3
+.env
